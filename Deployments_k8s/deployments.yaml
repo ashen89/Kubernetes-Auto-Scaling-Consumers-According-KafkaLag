@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafkaconsumer
+  labels:
+    app: kafkaconsumer
+  namespace: keda-eventhubkafka-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafkaconsumer
+  template:
+    metadata:
+      labels:
+        app: kafkaconsumer
+    spec:
+      containers:
+      - name: kafkaconsumer
+        image: nos98/kafkaservices:consumer
+        ports:
+        - containerPort: 8080
+        env:
+        - name: Kafka__BootstrapServers
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: kafka_bootstrapservers
+        - name: Kafka__Topic
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: kafka_topic
+        - name: Kafka__SaslPassword
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: password
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafkaproducer
+  labels:
+    app: kafkaproducer
+  namespace: keda-eventhubkafka-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafkaproducer
+  template:
+    metadata:
+      labels:
+        app: kafkaproducer
+    spec:
+      containers:
+      - name: kafkaproducer
+        image: nos98/kafkaservices:producer
+        ports:
+        - containerPort: 8080
+        env:
+        - name: Kafka__BootstrapServers
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: kafka_bootstrapservers
+        - name: Kafka__Topic
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: kafka_topic
+        - name: Kafka__SaslPassword
+          valueFrom: 
+            secretKeyRef:
+              name: keda-kafka-secrets
+              key: password

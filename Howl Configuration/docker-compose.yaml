@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  kowl:
+    image: quay.io/cloudhut/kowl:master
+    container_name: kowl
+    environment:
+      KAFKA_BROKERS: <eventhub_namespace_hostname>:9093 #INSERT NAMESPACE HERE
+      KAFKA_CLIENTID: kowl
+      KAFKA_SASL_ENABLED: true
+      KAFKA_SASL_USERNAME: $$ConnectionString # DON'T TOUCH THIS!!!!
+      KAFKA_SASL_PASSWORD: <eventhub_namespace_conn_string> #INSERT FULL CONNECTION STRING HERE
+      KAFKA_SASL_MECHANISM: PLAIN
+      KAFKA_TLS_ENABLED: true
+      KAFKA_TLS_INSECURESKIPTLSVERIFY: true    
+    ports: 
+      - "7000:8080"

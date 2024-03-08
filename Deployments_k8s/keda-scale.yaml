@@ -1,0 +1,46 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-kafka-credential
+  namespace: keda-eventhubkafka-demo
+spec:
+  secretTargetRef:
+  - parameter: sasl
+    name: keda-kafka-secrets
+    key: sasl
+  - parameter: username
+    name: keda-kafka-secrets
+    key: username
+  - parameter: password
+    name: keda-kafka-secrets
+    key: password
+  - parameter: tls
+    name: keda-kafka-secrets
+    key: tls
+
+---
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-consumer-scaler
+  namespace: keda-eventhubkafka-demo
+spec:
+  scaleTargetRef:
+    name: kafkaconsumer                      # Mandatory. Must be in the same namespace as the ScaledObject
+  pollingInterval:  30                       # Optional. Default: 30 seconds
+  cooldownPeriod:   10                       # Optional. Default: 300 seconds
+  minReplicaCount:  1                        # Optional. Default: 0
+  maxReplicaCount:  10                       # Optional. Default: 100
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: <eventhub_hostname>:9093
+      consumerGroup: local_consumer          
+      topic: <eventhub_topic>
+      lagThreshold: '1'
+      offsetResetPolicy: latest
+      allowIdleConsumers: "false"
+      version: 1.0.0
+    authenticationRef:
+      name: keda-trigger-auth-kafka-credential

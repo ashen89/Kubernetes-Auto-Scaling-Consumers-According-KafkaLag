@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: producer-service
+  namespace: keda-eventhubkafka-demo
+spec:
+  type: LoadBalancer
+  selector:
+    app: kafkaproducer
+  ports:
+    - port: 8080
