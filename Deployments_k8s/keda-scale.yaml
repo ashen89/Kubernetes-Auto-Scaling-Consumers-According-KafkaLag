@@ -35,9 +35,9 @@ spec:
   triggers:
   - type: kafka
     metadata:
-      bootstrapServers: <eventhub_hostname>:9093
+      bootstrapServers: <eventhub_hostname>:9093  # INSERT value of Azure Event Hub NameSpace Hostname. Note: Kafka protocol only avaiable on Standard or higher pricing tiers
       consumerGroup: local_consumer          
-      topic: <eventhub_topic>
+      topic: <eventhub_topic>                     # INSERT value of Azure Event Hub Name
       lagThreshold: '1'
       offsetResetPolicy: latest
       allowIdleConsumers: "false"

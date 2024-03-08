@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: kafkaconsumer
-        image: nos98/kafkaservices:consumer
+        image: nos98/kafkaservices:consumer # INSERT your consumer image if have a custom one
         ports:
         - containerPort: 8080
         env:
@@ -58,7 +58,7 @@ spec:
     spec:
       containers:
       - name: kafkaproducer
-        image: nos98/kafkaservices:producer
+        image: nos98/kafkaservices:producer # INSERT your producer image if have a custom one
         ports:
         - containerPort: 8080
         env:
